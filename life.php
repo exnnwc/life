@@ -1,8 +1,11 @@
 <?php
-session_start();
+include ("config.php");
 switch ($_POST['function_to_be_called']){
 	case "display_world":
-		display_world($_POST['turn']);
+		display_world();
+		break;
+	case "reset":
+		reset_everything();
 		break;
 }
 function apply_rules($world, $max_turns ){
@@ -10,15 +13,15 @@ function apply_rules($world, $max_turns ){
 		foreach($world as $x=>$arr){
 			foreach($arr as $y=>$val){
 				$num_of_neighbors=num_of_neighbors($world,$x,$y);
-				if ($world[$x][$y]>0){
+				if ($world[$x][$y]){
 					if($num_of_neighbors<2 || $num_of_neighbors>3){
-						$world[$x][$y]--;
+						$world[$x][$y]=false;
 					} else {
-						$world[$x][$y]++;
+						$world[$x][$y]=true;
 					}	
 				} else {
 					if ($num_of_neighbors==3){
-						$world[$x][$y]--;
+						$world[$x][$y]=true;
 					}
 				}	
 			}		
@@ -26,37 +29,64 @@ function apply_rules($world, $max_turns ){
 	}
 	return $world;
 }
-function display_world($turn){
-	if (isset($_SESSION['world'])) {
-		$world=$_SESSION['world'];
+
+function form(){
+	$string=  "<form method='POST' action='populate.php' ><table>";
+	for ($y=0;$y<SIZE;$y++){
+		$string=$string .  "<tr>";
+		for ($x=0;$x<SIZE;$x++){
+			$string=$string 
+			  . "<td id ='".$x."xy$y' style='width:".CELL_SIZE."px;height:".CELL_SIZE."px;border:solid 1px black;'>
+				<input name='".$x."xy$y' type='checkbox'  value='$y' />
+			     </td>";	
+		}
+		$string=$string .  "</tr>";
 	}
-	if ($turn>1){
-		$world=apply_rules($world, $turn);
-	}
-	if ($turn==0){
-		$string=  "<form method='POST' action='populate.php' ><table>";
-	} else {
-		$string="<table>";
-	}
-	foreach ($world as $x => $arr){
-	$string=$string .  "<tr>";
-		foreach ($arr as $y=>$val){
-			$string=$string . "<td>";
-			if ($turn==0){
-				$string=$string .  "<input name='".$x."xy$y' type='checkbox'  value='$y' />";
-			} else {
-				$string=$string .  $world[$x][$y];
-			}
+	$string=$string .  "</table><input type='submit' /></form>";
+	return $string;
+
+}
+
+function world($world){
+	$string="<table id='relevant_table'>";
+	for ($y=0;$y<SIZE;$y++){
+		$string=$string .  "<tr>";
+		for ($x=0;$x<SIZE;$x++){
+			$string=$string . "<td id ='".$x."xy$y' 
+				style='width:".CELL_SIZE."px;height:".CELL_SIZE."px;border:solid 1px black;'>";
+			$world[$x][$y]
+				?$string=$string . "O":"";// "($x, $y)";
 			$string=$string .  "</td>";	
 		}
 		$string=$string .  "</tr>";
 	}
 	$string=$string .  "</table>";
+	return $string;
 
-	if ($turn==0){
-		$string=$string .  "<input type='submit' /></form>";
+}
+function display_world(){
+	$turn=0;
+	if (isset($_SESSION['turn'])){
+		$turn=$_SESSION['turn'];
+	} 
+	if (isset($_SESSION['world'])) {
+		$world=$_SESSION['world'];
+	} else {
+		$world=[];
 	}
-	echo $string;
+	if ($turn>1){
+		$world=apply_rules($world, $turn);
+	}
+	if ($turn==0){
+		echo form();
+	} else if ($turn>0){
+		echo world($world);
+	}
+	$turn=$_SESSION['turn'];
+	if ($turn>0){
+		$_SESSION['turn']++;
+	}
+	//come back and later do turn incrementing
 }
 
 function num_of_neighbors($world, $x, $y){
@@ -90,3 +120,9 @@ function neighbors($home_x, $home_y){
 	return $neighbors;	
 }
 
+function reset_everything(){
+	$_SESSION['turn']=0;
+}
+function toggle_continue(){
+	$_SESSION=!$_SESSION['continue'];  
+}

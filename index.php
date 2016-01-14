@@ -1,43 +1,43 @@
+<?php include ("config.php"); ?>
 <html>
 <head>
-<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://localhost/jquery-2.1.4.min.js"></script>
 <script>
-function displayWorld(turn){
+function displayWorld(){
 	$.ajax({
 		method:"POST",
 		url:"life.php",
-		data:{function_to_be_called:"display_world", turn:turn}
+		data:{function_to_be_called:"display_world"}
 	})
 		.done(function (result){
 			$("#world_space").html(result);	
 		});
 }
-
-function resetSession(){
-displayWorld(0);
-	/*$.ajax({
+function reset(){
+	$.ajax({
 		method:"POST",
 		url:"life.php",
-		data:{function_to_be_called:"reset_session"}
+		data:{function_to_be_called:"reset"}
 	})
-		.done (displayWorld(0));*/
-}	
-function test(){
-	$("#world_space").html("Test");
+		.done(function(result){
+			displayWorld();
+		});
 }
 </script>
 </head>
-<body onload="displayWorld(
-<?php 
-session_start();
-$_SESSION['turn']=3;
-if (isset($_SESSION['turn'])){
-	echo $_SESSION['turn'];
-} else { 
-	echo "0"; 
-}
-?>
-			     )">
-<input type='button' value='Reset' onclick="resetSession();" />
+<body onload="displayWorld()">
+Turn:<?php echo isset($_SESSION['turn'])? $_SESSION['turn']:"";?>
+<?php if ($_SESSION['turn']>0):?>
+<input type='button' value='Reset' onclick="reset();" /> 
+	<?php if ($_SESSION['continue']):?>
+	<input type='button' value='Pause'>
+	<?php else:?>
+	<input type='button' value='Play'>
+	<?php endif?>
+<?php endif ?>
 <div id="world_space"></div>
 </body></html>
+<?php 
+if (isset($_SESSION['turn']) && $_SESSION['turn']>0 && $_SESSION['continue']==true){
+		header("Refresh:2");
+	}
