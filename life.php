@@ -1,6 +1,6 @@
 <?php
-
 include ("config.php");
+
 switch ($_POST['function_to_be_called']) {
     case "display_world":
         display_world();
@@ -14,8 +14,8 @@ switch ($_POST['function_to_be_called']) {
 }
 
 function apply_rules() {
+    $_SESSION['last_world'] = $_SESSION['world'];
 
-    for ($turn = 1; $turn <= $_SESSION['turn']; $turn++) {
         foreach ($_SESSION["world"] as $x => $arr) {
             foreach ($arr as $y => $val) {
                 $num_of_neighbors = num_of_neighbors($x, $y);
@@ -32,13 +32,11 @@ function apply_rules() {
                 }
             }
         }
-    }
-    return true;
 }
 
 function display_world() {
-    $_SESSION['last_world'] = $_SESSION['world'];
-    apply_rules() ? should_it_continue():"";
+    apply_rules();
+    should_it_continue();
 
     if ($_SESSION['turn'] == 0) {
         echo form();
@@ -68,7 +66,6 @@ function is_everything_dead() {
     foreach ($_SESSION["world"] as $x => $arr) {
         foreach ($arr as $y => $val) {
             if ($_SESSION["world"][$x][$y]) {
-                echo "$x, $y";
                 return false;
             }
         }
@@ -113,15 +110,20 @@ function reset_everything() {
 }
 
 function should_it_continue() {
-    //$_SESSION['last_world'] == $_SESSION['world'] ||
+	echo __FUNCTION__ . "<BR />";
     var_dump($_SESSION['continue']);
-    $_SESSION['continue'] = is_everything_dead() ? false : true;
+    $_SESSION['continue'] = ($_SESSION['last_world'] ==$_SESSION['world']) ? false : true;
     var_dump($_SESSION['continue']);
 }
 
 function toggle_continue() {
+	echo __FUNCTION__ . "\n";
+	var_dump($_SESSION['continue']);
     $_SESSION['continue'] = !$_SESSION['continue'];
+	var_dump($_SESSION['continue']);
 }
+
+
 
 function world() {
     $string = "<table id='relevant_table'>";

@@ -1,4 +1,5 @@
-<?php include ("config.php"); ?>
+<?php include ("config.php");
+var_dump ($_SESSION['continue']); ?>
 <html>
     <head>
         <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -38,14 +39,18 @@
                     data: {function_to_be_called: "toggle_continue"}
                 })
                         .done(function (result) {
-                            location.reload();
+				console.log(result);
+				//window.location.href="<?php echo $_SERVER['PHP_SELF']; ?>";	
+	
                         });
 
             }
+		function reload(){
+			location.reload();
+		}
         </script>
     </head>
     <body onload="displayWorld()">
-        
         <?php if ($_SESSION['turn'] > 0): ?>
             <input type='button' value='Reset' onclick="reset();" /> 
             <?php if ($_SESSION['continue']): ?>
@@ -55,8 +60,7 @@
             <?php endif ?>
         <?php endif ?>
                 Turn:<?php echo isset($_SESSION['turn']) ? $_SESSION['turn'] : ""; ?>
-               
-        <input class="test" type="button" />
+        <input type='button' onclick="reload()" />       
         <div id="world_space"></div>
     </body></html>
 <?php
