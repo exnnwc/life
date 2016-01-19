@@ -1,12 +1,19 @@
 <?php include ("config.php");
-var_dump ($_SESSION['continue']); ?>
+?>
 <html>
     <head>
+<meta http-equiv="Cache-control" content="no-cache">
+<meta http-equiv="Expires" content="-1">
         <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>
             $(document).ready(function () {
                 $(".toggle").on("click", function () {
-                    toggle_continue();
+			if ($(".toggle").val()=="Pause"){
+				continue_val=false;
+			} else if ($(".toggle").val()=="Play"){
+				continue_val=true;
+			}
+                    set_continue(continue_val);
                 });
             });
             function test() {
@@ -15,8 +22,8 @@ var_dump ($_SESSION['continue']); ?>
             function displayWorld() {
                 $.ajax({
                     method: "POST",
-                    url: "life.php",
-                    data: {function_to_be_called: "display_world"}
+                    url: "display.php",
+                    data: {function_to_be_called: "display"}
                 })
                         .done(function (result) {
                             $("#world_space").html(result);
@@ -29,25 +36,22 @@ var_dump ($_SESSION['continue']); ?>
                     data: {function_to_be_called: "reset"}
                 })
                         .done(function (result) {
+				console.log("RESET");
                             displayWorld();
                         });
             }
-            function toggle_continue() {
+            function set_continue(continue_val) {
                 $.ajax({
                     method: "POST",
                     url: "life.php",
-                    data: {function_to_be_called: "toggle_continue"}
+                    data: {function_to_be_called: "set_continue", continue_var:continue_val}
                 })
                         .done(function (result) {
 				console.log(result);
-				//window.location.href="<?php echo $_SERVER['PHP_SELF']; ?>";	
-	
+				location.reload(true);	
                         });
 
             }
-		function reload(){
-			location.reload();
-		}
         </script>
     </head>
     <body onload="displayWorld()">
