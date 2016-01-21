@@ -1,5 +1,5 @@
 <?php
-//include ("config.php");
+include ("config.php");
 switch ($_POST['function_to_be_called']) {
     case "reset":
         reset_everything();

@@ -1,6 +1,5 @@
 <?php
 include("life.php");
-include ("config.php");
     if ($_SESSION['turn'] == 0) {
         echo form();
     } else if ($_SESSION['turn'] > 0) {
