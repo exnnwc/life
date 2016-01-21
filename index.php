@@ -69,5 +69,5 @@
     </body></html>
 <?php
 if (isset($_SESSION['turn']) && $_SESSION['turn'] > 0 && $_SESSION['continue'] == true) {
-    header("Refresh:2");
+//    header("Refresh:2");
 }

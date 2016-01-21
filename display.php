@@ -4,6 +4,7 @@ include("life.php");
         echo form();
     } else if ($_SESSION['turn'] > 0) {
         echo world();
+//	echo test();
         $_SESSION['turn'] ++;
     }
     apply_rules();
@@ -24,6 +25,20 @@ function form() {
     return $string;
 }
 
+function test() {
+	$arr=[];
+    for ($y = 0; $y < SIZE; $y++) {
+        for ($x = 0; $x < SIZE; $x++) {
+		if ($_SESSION["world"][$x][$y]){
+			$cell=["($x, $y)", num_of_neighbors($x, $y)];
+			array_push($arr,$cell);	 
+//			array_push($arr, neighbors($x, $y));
+		}
+        }
+   }
+    $string="<PRE>". var_dump($arr) . "</PRE>";
+    return $string;
+}
 function world() {
     $string = "<table id='relevant_table'>";
     for ($y = 0; $y < SIZE; $y++) {

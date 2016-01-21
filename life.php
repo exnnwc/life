@@ -17,11 +17,24 @@ function alive($num_of_neighbors){
 }
 
 function apply_rules() {
-    $_SESSION['last_world'] = $_SESSION['world'];
-    foreach ($_SESSION["world"] as $x => $arr) {
-        foreach ($arr as $y => $val) {
+    $test=false;
+    $_SESSION['last_world'] = $_SESSION['world'];	
+    for($x=0;$x<SIZE;$x++) {
+        for($y=0;$y<SIZE;$y++) {
     	    $num_of_neighbors=num_of_neighbors($x,$y);
-            $_SESSION["world"][$x][$y] = $_SESSION["world"][$x][$y] ? alive($num_of_neighbors) : dead($num_of_neighbors);
+		if ($_SESSION["world"][$x][$y] && $test){
+			echo "($x, $y) - <div style='";
+			echo $_SESSION["world"][$x][$y] ? "background-color:green;" : "background-color:red;";
+			echo "'>Status</div> NEIGHBORS:$num_of_neighbors <div style='";
+			if ( $_SESSION["world"][$x][$y] ? alive($num_of_neighbors) : dead($num_of_neighbors)){
+				echo "background-color:green;";
+			} else {
+				echo "background-color:red;";
+			}
+			echo "'>Change</div><BR>";
+		} 
+	            $_SESSION["world"][$x][$y] = $_SESSION["world"][$x][$y] ? alive($num_of_neighbors) : dead($num_of_neighbors);
+		
         }
     }
     should_it_continue();
@@ -50,19 +63,12 @@ function is_everything_dead() {
 
 function neighbors($home_x, $home_y) {
     $neighbors = array();
-    $x = $home_x - 1;
-    $y = $home_y - 1;
-    for ($i = 0; $i < 8; $i++) {
-        if ($x == $home_x && $x == $home_y) {
-            $x++;
-        }
-        $neighbors[$i]["x"] = $x;
-        $neighbors[$i]["y"] = $y;
-        if ($x + 1 > $home_x + 1) {
-            $x = $home_x - 1;
-            $y++;
-        } else {
-            $x++;
+    for ($x=($home_x-1);$x<($home_x+2);$x++){
+        for ($y=($home_y-1);$y<($home_y+2);$y++){
+    	    if ($x!=$home_x || $y!=$home_y){
+		$coords=["x"=>$x, "y"=>$y];
+		array_push($neighbors, $coords);
+	    }
         }
     }
     return $neighbors;
