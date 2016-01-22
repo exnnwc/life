@@ -55,6 +55,9 @@
         </script>
     </head>
     <body onload="displayWorld()">
+	<div>
+		<input class="preset" type='button' value="1" />
+	</div>
         <?php if ($_SESSION['turn'] > 0): ?>
             <input type='button' value='Reset' onclick="reset();" /> 
             <?php if ($_SESSION['continue']): ?>

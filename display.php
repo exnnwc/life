@@ -10,13 +10,22 @@ include("life.php");
     apply_rules();
 
 function form() {
+    $presets=get_presets();
+            foreach ($presets as $preset){
+                var_dump($preset);
+                for ($i=0;$i<sizeof($preset[0]);$i++){
+                        echo "(x,". $preset[0][$i].", y".$preset[1][$i].")<br>";
+                }
+            }
     $string = "<form method='POST' action='populate.php'><table>";
     for ($y = 0; $y < SIZE; $y++) {
         $string = $string . "<tr>";
         for ($x = 0; $x < SIZE; $x++) {
+		
             $string = $string
                     . "<td id ='" . $x . "xy$y' style='width:" . CELL_SIZE . "px;height:" . CELL_SIZE . "px;border:solid 1px black;'>
-				<input name='" . $x . "xy$y' type='checkbox'  value='$y' />
+				<input name='" . $x . "xy$y' type='checkbox'  value='$y'";
+            $string = $string . " />
 			     </td>";
         }
         $string = $string . "</tr>";
@@ -53,4 +62,39 @@ function world() {
     }
     $string = $string . "</table>";
     return $string;
+}
+
+
+function get_presets(){
+    $presets=[];
+    $x=[];
+    $y=[];
+    for ($set=0;$set<4;$set++){
+        for ($i=0;$i<4;$i++){
+            switch ($set){
+                case 0:
+                    //top left
+                    array_push($x,$i);
+                    array_push($y,$i);
+                    break;
+                case 1:
+                    //bottom left
+                    array_push($x, $i);
+                    array_push($y, (SIZE-1)-$i);
+                    break;
+                case 2:
+                    //top right
+                    array_push($x, (SIZE-1)-$i);
+                    array_push($y,$i);
+                    break;
+                case 3:
+                    //bottom right
+                    array_push($x, (SIZE-1)-$i);
+                    array_push($y, (SIZE-1)-$i);
+                    break;
+            }
+        }  
+    }
+    $presets["diagnol-corners"]=[$x,$y];
+    return $presets;
 }

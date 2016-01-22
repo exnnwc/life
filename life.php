@@ -33,7 +33,14 @@ function apply_rules() {
 			}
 			echo "'>Change</div><BR>";
 		} 
-	            $_SESSION["world"][$x][$y] = $_SESSION["world"][$x][$y] ? alive($num_of_neighbors) : dead($num_of_neighbors);
+		if ($_SESSION["world"][$x][$y]){
+			echo $num_of_neighbors;
+			$_SESSION["world"][$x][$y]=alive($num_of_neighbors); 
+			var_dump($_SESSION["world"][$x][$y]);
+		} else {
+
+			$_SESSION["world"][$x][$y]=dead($num_of_neighbors);
+		}
 		
         }
     }
