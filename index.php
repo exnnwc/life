@@ -8,17 +8,19 @@
         <script>
             $(document).ready(function () {
                 $(".toggle").on("click", function () {
-			if ($(".toggle").val()=="Pause"){
-				continue_val=false;
-			} else if ($(".toggle").val()=="Play"){
-				continue_val=true;
-			}
+        			if ($(".toggle").val()=="Pause"){
+        				continue_val=false;
+        			} else if ($(".toggle").val()=="Play"){
+        				continue_val=true;
+        			}
                     set_continue(continue_val);
                 });
+                $("#reset").on("click", function(){
+                    reset();
+                });
+                
             });
-            function test() {
-                document.write("Test.");
-            }
+
             function displayWorld() {
                 $.ajax({
                     method: "POST",
@@ -29,6 +31,7 @@
                             $("#world_space").html(result);
                         });
             }
+
             function reset() {
                 $.ajax({
                     method: "POST",
@@ -40,6 +43,7 @@
                             displayWorld();
                         });
             }
+
             function set_continue(continue_val) {
                 $.ajax({
                     method: "POST",
@@ -50,27 +54,31 @@
 				console.log(result);
 				location.reload(true);	
                         });
+            }
 
+            function test() {
+                document.write("Test.");
             }
         </script>
     </head>
     <body onload="displayWorld()">
 	<div>
-		<input class="preset" type='button' value="1" />
 	</div>
+
         <?php if ($_SESSION['turn'] > 0): ?>
-            <input type='button' value='Reset' onclick="reset();" /> 
+            <input id='reset' type='button' value='Reset' /> 
             <?php if ($_SESSION['continue']): ?>
                 <input class="toggle" type='button' value='Pause'>
             <?php else: ?>
                 <input class="toggle" type='button' value='Play'>
             <?php endif ?>
         <?php endif ?>
+
                 Turn:<?php echo isset($_SESSION['turn']) ? $_SESSION['turn'] : ""; ?>
-        <input type='button' onclick="reload()" />       
         <div id="world_space"></div>
     </body></html>
+
 <?php
 if (isset($_SESSION['turn']) && $_SESSION['turn'] > 0 && $_SESSION['continue'] == true) {
-//    header("Refresh:2");
+    header("Refresh:2");
 }

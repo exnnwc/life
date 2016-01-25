@@ -17,6 +17,7 @@ function alive($num_of_neighbors){
 }
 
 function apply_rules() {
+    $new_world=[];
     $test=false;
     $_SESSION['last_world'] = $_SESSION['world'];	
     for($x=0;$x<SIZE;$x++) {
@@ -34,16 +35,17 @@ function apply_rules() {
 			echo "'>Change</div><BR>";
 		} 
 		if ($_SESSION["world"][$x][$y]){
-			echo $num_of_neighbors;
-			$_SESSION["world"][$x][$y]=alive($num_of_neighbors); 
-			var_dump($_SESSION["world"][$x][$y]);
+			//echo "($x, $y) - $num_of_neighbors neighbors<br>";
+			$new_world[$x][$y]=alive($num_of_neighbors); 
+			//var_dump($_SESSION["world"][$x][$y]);
 		} else {
 
-			$_SESSION["world"][$x][$y]=dead($num_of_neighbors);
+			$new_world[$x][$y]=dead($num_of_neighbors);
 		}
 		
         }
     }
+    $_SESSION['world']=$new_world;
     should_it_continue();
 }
 
@@ -83,11 +85,26 @@ function neighbors($home_x, $home_y) {
 
 function num_of_neighbors($x, $y) {
     $neighbors = neighbors($x, $y);
-    $num = 0;
+    $num = 0;  
+    if ($_SESSION["world"][$x][$y]){
+       // echo "Evaluating number of neighbors for ($x, $y)...<br>";
+    }
     for ($i = 0; $i < 8; $i++) {
-        if (isset($_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]) && $_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]] > 0) {
+        
+        if (isset($_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]) 
+          && $_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]==true ) {
             $num++;
         }
+  /*      if ($_SESSION["world"][$x][$y]){
+            $if_statement=var_dump(isset($_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]) 
+                && $_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]==true);
+            $does_world_exist=var_dump(isset($_SESSION["world"][$neighbors[$i]["x"]][$neighbors[$i]["y"]]));
+            echo "<div>$num - Neighbor #$i @ (" . $neighbors[$i]["x"] . ", " . $neighbors[$i]["y"] . ") 
+                - " . $does_world_exist ."/". $if_statement; 
+        }*/
+    }
+    if ($_SESSION["world"][$x][$y]){
+        //echo "<br><br>";
     }
     return $num;
 }

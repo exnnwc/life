@@ -1,30 +1,34 @@
 <?php
 include("life.php");
+
     if ($_SESSION['turn'] == 0) {
         echo form();
     } else if ($_SESSION['turn'] > 0) {
         echo world();
 //	echo test();
         $_SESSION['turn'] ++;
+        apply_rules();
     }
-    apply_rules();
 
 function form() {
     $presets=get_presets();
-            foreach ($presets as $preset){
-                var_dump($preset);
-                for ($i=0;$i<sizeof($preset[0]);$i++){
-                        echo "(x,". $preset[0][$i].", y".$preset[1][$i].")<br>";
-                }
-            }
     $string = "<form method='POST' action='populate.php'><table>";
     for ($y = 0; $y < SIZE; $y++) {
         $string = $string . "<tr>";
         for ($x = 0; $x < SIZE; $x++) {
 		
             $string = $string
-                    . "<td id ='" . $x . "xy$y' style='width:" . CELL_SIZE . "px;height:" . CELL_SIZE . "px;border:solid 1px black;'>
-				<input name='" . $x . "xy$y' type='checkbox'  value='$y'";
+                    . "<td id ='" . $x . "xy$y' 
+                         style='width:" . CELL_SIZE . "px;height:" . CELL_SIZE . "px;border:solid 1px black;'>
+				       <input name='" . $x . "xy$y' type='checkbox'  value='$y'";
+            foreach ($presets as $preset){
+                for ($i=0;$i<sizeof($preset[0]);$i++){
+                    if ($preset[0][$i]==$x && $preset[1][$i]==$y){
+                        $string = $string . " checked";
+                    }
+                }
+    
+            }
             $string = $string . " />
 			     </td>";
         }
