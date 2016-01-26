@@ -1,9 +1,6 @@
 <?php
 include ("config.php");
 switch ($_POST['function_to_be_called']) {
-    case "reset":
-        reset_everything();
-        break;
     case "set_continue":
         set_continue(filter_input(INPUT_POST, "continue_var", FILTER_VALIDATE_BOOLEAN));
         break;
@@ -109,10 +106,6 @@ function num_of_neighbors($x, $y) {
     return $num;
 }
 
-function reset_everything() {
-    $_SESSION['turn'] = 0;
-	echo "CHECK";
-}
 
 function should_it_continue() {
     $_SESSION['continue'] = ($_SESSION['last_world'] ==$_SESSION['world']) ? false : true;

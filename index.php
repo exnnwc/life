@@ -1,9 +1,8 @@
-<?php include ("config.php");
-?>
+<?php include ("config.php");?>
 <html>
     <head>
-<meta http-equiv="Cache-control" content="no-cache">
-<meta http-equiv="Expires" content="-1">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Expires" content="-1">
         <script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>
             $(document).ready(function () {
@@ -31,7 +30,7 @@
                             $("#world_space").html(result);
                         });
             }
-
+/*
             function reset() {
                 $.ajax({
                     method: "POST",
@@ -43,7 +42,7 @@
                             displayWorld();
                         });
             }
-
+*/
             function set_continue(continue_val) {
                 $.ajax({
                     method: "POST",
@@ -66,18 +65,22 @@
 	</div>
 
         <?php if ($_SESSION['turn'] > 0): ?>
-            <input id='reset' type='button' value='Reset' /> 
+            <form action='reset.php' method='post'>
+            <input id='reset' type='submit' value='Reset' /> 
+            </form>
+            <form action='continue.php' method='post'>
             <?php if ($_SESSION['continue']): ?>
-                <input class="toggle" type='button' value='Pause'>
+                <input name='continue' type='hidden' value='false' />
+                <input class="toggle" type='submit' value='Pause'>
             <?php else: ?>
-                <input class="toggle" type='button' value='Play'>
+                <input name="continue" type='hidden' value='true' />
+               <input class="toggle" type='submit' value='Play'>
             <?php endif ?>
+            </form>
         <?php endif ?>
-
                 Turn:<?php echo isset($_SESSION['turn']) ? $_SESSION['turn'] : ""; ?>
         <div id="world_space"></div>
     </body></html>
-
 <?php
 if (isset($_SESSION['turn']) && $_SESSION['turn'] > 0 && $_SESSION['continue'] == true) {
     header("Refresh:2");

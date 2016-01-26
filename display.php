@@ -11,7 +11,7 @@ include("life.php");
     }
 
 function form() {
-    $presets=get_presets();
+    $presets=[];//get_presets();
     $string = "<form method='POST' action='populate.php'><table>";
     for ($y = 0; $y < SIZE; $y++) {
         $string = $string . "<tr>";

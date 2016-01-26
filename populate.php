@@ -2,8 +2,6 @@
 include ("config.php");
 $_SESSION['continue']=true;
 $_SESSION['turn']=1;
-$current_dir= "life";
-$url="http://".$_SERVER['SERVER_NAME']."/".$current_dir."/";
 $world = array();
 for ($y=0;$y<SIZE;$y++){
 	for ($x=0;$x<SIZE;$x++){
@@ -36,4 +34,4 @@ echo " <BR />";*/
 	$world[$x][$y]=true;
 }
 $_SESSION['world']=$world;
-header("Location: $url");
+header("Location:index.php");
