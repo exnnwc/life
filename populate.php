@@ -1,37 +1,17 @@
 <?php
-include ("config.php");
+include_once ("config.php");
 $_SESSION['continue']=true;
+$_SESSION['stop']=false;
 $_SESSION['turn']=1;
-$world = array();
 for ($y=0;$y<SIZE;$y++){
 	for ($x=0;$x<SIZE;$x++){
-		$world[$x][$y]=false;			
+		$_SESSION['world'][$x][$y]=false;			
 	}
 }
-//var_dump($_POST);
-foreach($_POST as $key => $val){
-	if(substr($key,1,1)=="x"){
-		$x=(int)substr($key,0,1);
-	} else {
-		$x=(int)substr($key,0,2);
-	}
-/*01/13/16
-	echo "CHECKING ";
-	var_dump( substr($key,(strlen($key)-1),1));
-	echo "<BR>";
-*/
-	if(substr($key,(strlen($key)-2),1)=="y"){
-		$y=(int)substr($key,strlen($key)-1,1);
-	} else {
-		$y=(int)substr($key,strlen($key)-2,2);
-
-	}
-	echo $y . "<BR>";
-/*	var_dump($x);
-echo ", " .
-var_dump($y);
-echo " <BR />";*/
-	$world[$x][$y]=true;
+foreach ($_POST as $val){
+    $coords= json_decode($val);
+    $x=$coords[0];
+    $y=$coords[1];
+	$_SESSION['world'][$x][$y]=true;
 }
-$_SESSION['world']=$world;
 header("Location:index.php");

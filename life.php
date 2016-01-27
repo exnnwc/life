@@ -1,11 +1,5 @@
 <?php
-include ("config.php");
-switch ($_POST['function_to_be_called']) {
-    case "set_continue":
-        set_continue(filter_input(INPUT_POST, "continue_var", FILTER_VALIDATE_BOOLEAN));
-        break;
-}
-
+include_once ("config.php");
 function alive($num_of_neighbors){
 	if ($num_of_neighbors < 2 || $num_of_neighbors > 3) {
         	return false;
@@ -108,9 +102,7 @@ function num_of_neighbors($x, $y) {
 
 
 function should_it_continue() {
-    $_SESSION['continue'] = ($_SESSION['last_world'] ==$_SESSION['world']) ? false : true;
+    $_SESSION['stop'] = ($_SESSION['last_world'] ==$_SESSION['world']) ? true : false;
+    var_dump ($_SESSION['stop']);
 }
 
-function set_continue($continue) {
-    $_SESSION['continue'] = $continue;
-}
