@@ -19,10 +19,11 @@
     </head>
     <body>
         <?php if ($_SESSION['turn'] > 0): ?>
-            <form action='reset.php' method='post'>
+            
+            <form style='float:left' action='reset.php' method='post'>
             <input id='reset' type='submit' value='Reset' /> 
             </form>
-            <form action='continue.php' method='post'>
+            <form  style='float:left' action='continue.php' method='post'>
             <?php if ($_SESSION['continue'] && !$_SESSION['stop']): ?>
                 <input name='continue' type='hidden' value='false' />
                 <input class="toggle" type='submit' value='Pause'>
@@ -35,7 +36,7 @@
             </form>
         <?php endif ?>
                 Turn:<?php echo $_SESSION['turn']; ?>
-        <div id="world_space"></div>
+        <div style='clear:both;'  id="world_space"></div>
     </body>
 </html>
 <?php
