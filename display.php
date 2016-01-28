@@ -1,4 +1,5 @@
 <?php
+include_once("config.php");
 include("life.php");
     if ($_SESSION['turn'] == 0) {
         echo form();
